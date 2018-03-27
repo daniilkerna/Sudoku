@@ -167,10 +167,16 @@ class SudokuBoard{
     }
     
     func anyPencilSetAt(row :Int, column :Int) -> Bool {    // Are there any penciled in values at the given cell
+        if (row == -1 || column == -1){
+            return false
+        }
         return self.board[row][column].isHaveValueWritten
     }
     
     func isSetPencil(_ n : Int, row :Int, column :Int) -> Bool { //Is value n penciled in ?
+        if (row == -1 || column == -1){
+            return false
+        }
         return (n == numberAt(row: row, column: column))
     }
 }

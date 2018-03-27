@@ -34,6 +34,11 @@ class PuzzleViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: "Clear Conflicting Entries", style: UIAlertActionStyle.default,handler: doClearConflicting ))
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel,handler: nil))
         //alertController.preferredAction = alertController.actions[2]
+        
+        let popover = alertController.popoverPresentationController
+        popover?.sourceView = view
+        popover?.sourceRect = CGRect(x: self.view.frame.size.width/2,y: self.view.frame.size.height/2, width: 164, height: 164)
+        
         self.present(alertController, animated: true, completion: nil)
     }
     
@@ -100,7 +105,9 @@ class PuzzleViewController: UIViewController {
             let alertController = UIAlertController(title: "Congrats!", message: "you solved the game", preferredStyle: UIAlertControllerStyle.alert)
             
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default,handler: nil))
+            
             self.present(alertController, animated: true, completion: nil)
+           
         }
         
         puzzleView.setNeedsDisplay()
