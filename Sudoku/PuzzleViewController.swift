@@ -19,6 +19,7 @@ class PuzzleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,6 +42,15 @@ class PuzzleViewController: UIViewController {
         let puzzle = appDelegate.sudoku
         puzzle?.clearBoard()
         puzzleView.setNeedsDisplay()
+    }
+    
+    func doAbandonGame(action: UIAlertAction) {
+        //Use action.title
+        let puzzle = appDelegate.sudoku
+        puzzle?.clearBoard()
+        puzzle?.abandonGame()
+        puzzleView.setNeedsDisplay()
+        performSegue(withIdentifier: "goToMainView", sender: self)
     }
     
     func doClearConflicting(action: UIAlertAction) {
@@ -86,6 +96,13 @@ class PuzzleViewController: UIViewController {
             }
         }
         
+        if (puzzle!.checkForWin() ){
+            let alertController = UIAlertController(title: "Congrats!", message: "you solved the game", preferredStyle: UIAlertControllerStyle.alert)
+            
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default,handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+        }
+        
         puzzleView.setNeedsDisplay()
     }
     
@@ -100,5 +117,13 @@ class PuzzleViewController: UIViewController {
         
         sender.isSelected = false
         puzzleView.setNeedsDisplay()
+    }
+    @IBAction func abandonPressed(_ sender: Any) {
+        //let puzzle = appDelegate.sudoku
+        let alertController = UIAlertController(title: "Abandon Game", message: "Are you sure?", preferredStyle: UIAlertControllerStyle.alert)
+        
+        alertController.addAction(UIAlertAction(title: "Abandon Game", style: UIAlertActionStyle.destructive,handler: doAbandonGame))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default,handler: nil))
+        self.present(alertController, animated: true, completion: nil)
     }
 }

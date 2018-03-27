@@ -22,6 +22,7 @@ struct Cell {
 
 class SudokuBoard{
     var board: [[Cell]] = Array(repeating: Array(repeating: Cell(value: 0, isFixed: true, isHaveValueWritten: false), count: 9), count: 9)
+    var gameIsOn: Bool = false
     
     init(puzzle: String){       //iniitailize the board
         var row = 0
@@ -38,10 +39,15 @@ class SudokuBoard{
             }
             col = (col + 1) % 9
         }
+        self.gameIsOn = true
     }
     
     func numberAt(row: Int, column: Int) -> Int {   // Number stored at given row and column, 0 indicates empty
         return self.board[row][column].value
+    }
+    
+    func abandonGame(){
+        self.gameIsOn = false
     }
     
     func clearNumberAt(row: Int, column: Int) -> Void {//clear number at
@@ -73,6 +79,20 @@ class SudokuBoard{
             }
         }
         
+    }
+    
+    func checkForWin() -> Bool {
+        for row in 0 ..< 9 {
+            for col in 0 ..< 9 {
+                if (self.anyPencilSetAt(row: row, column: col) && self.isConflictingEntryAt(row: row, column: col)) {
+                    return false
+                }
+                if (self.numberAt(row: row, column: col) == 0){
+                    return false
+                }
+            }
+        }
+        return true
     }
     
     func numberIsFixedAt(row: Int, column: Int) -> Bool {     // is the number part of the puzzle and cannot be changed
